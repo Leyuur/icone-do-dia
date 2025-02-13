@@ -6,11 +6,26 @@ document.addEventListener("DOMContentLoaded", () => {
     const photoDiv = document.getElementById("student-photo");
     const nameDiv = document.getElementById("student-name");
     const imageDiv = document.getElementById("image");
+    const loader = document.querySelector(".loader");
+
+    function setLoading(bool) {
+        if(bool) {
+            submit.innerText = "";
+            submit.append(loader)
+            loader.classList.remove("hidden")
+            submit.disabled = true;
+        } else {
+            loader.classList.add("hidden")
+            submit.innerText = "Baixar";
+            submit.disabled = false;
+        }
+    }
 
     submit.addEventListener("click", () => {
-        
+        setLoading(true)
         if(name.value == "" || photo.value == "") {
             alert("Os campos devem ser preenchidos");
+            setLoading(false)
             return
         }
 
@@ -36,8 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     downloadLink.href = imgData;
                     downloadLink.download = `Parabens ${name.value}.png`; 
                     downloadLink.click(); 
-
-                    
+                    setLoading(false)
                 }
             });
         }, 500)
