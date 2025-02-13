@@ -20,7 +20,7 @@ body {
 #image {
     height: 1920px;
     width: 1080px;
-    background: url("./data/fundo.gif");
+    background: url("./fundo.gif");
     position: relative;
 }
 
