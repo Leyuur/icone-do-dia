@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
             html2canvas(imageDiv, {
                 onrendered: function (canvas) {
 
-                    const imgData = canvas.toDataURL("image/gif");
+                    const imgData = canvas.toDataURL("image/png");
 
                     const downloadLink = document.createElement("a");
                     downloadLink.href = imgData;
