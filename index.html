@@ -11,7 +11,9 @@
 <body>
     <div id="image">
         <img id="baloons" src="./1.png">
-        <img id="student-photo">
+        <div class="student-photo-div">
+            <img id="student-photo">
+        </div>
         <img id="elements" src="./2.png">
         <h1 id="student-name">Alice Abreu dos Santos</h1>
     </div>
@@ -22,7 +24,7 @@
             <input id="name" type="text" placeholder="Digite o nome do aluno aqui">
             <label for="photo">Foto do aluno</label>
             <input id="photo" type="file">
-            <button id="submit">Baixar</button>
+            <button id="submit"><div class="loader hidden"></div>Baixar</button>
         </div>
     </div>
 </body>
