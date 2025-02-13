@@ -41,8 +41,8 @@ body {
 
 #student-photo {
     position: absolute;
-    width: 635px;
-    height: 590px;
+    width: 600px;
+    height: 600px;
     z-index: 2;
     top: 25%;
     right: 15%;
