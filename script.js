@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const img = new Image();
                 img.src = e.target.result;
                 img.style.width = "100%";
-                img.style.height = "100%";
+                img.style.height = "auto";
                 img.style.objectFit = "cover";
                 photoDiv.innerHTML = "";
                 photoDiv.appendChild(img);
