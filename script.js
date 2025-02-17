@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const name = document.getElementById("name");
     const photo = document.getElementById("photo");
     const popup = document.querySelector(".popup");
-    const photoDiv = document.getElementById("student-photo");
+    const photoDiv = document.getElementById("student-photo-div");
     const nameDiv = document.getElementById("student-name");
     const imageDiv = document.getElementById("image");
     const loader = document.querySelector(".loader");
@@ -33,11 +33,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const file = photo.files[0];
 
+        photoDiv.style.backgroundPosition = "bottom"; 
+        photoDiv.style.backgroundSize = "cover"; 
+
         if (file) {
             const reader = new FileReader();
             reader.onload = function (e) {
-                photoDiv.src = e.target.result; 
-            };
+                const img = new Image();
+                img.src = e.target.result;
+                img.style.width = "100%";
+                img.style.height = "100%";
+                img.style.objectFit = "cover";
+                photoDiv.innerHTML = "";
+                photoDiv.appendChild(img);
+            };            
             reader.readAsDataURL(file); 
         }
 
