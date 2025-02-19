@@ -1,8 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
     const submit = document.getElementById("submit");
-    const name = document.getElementById("name");
-    const photo = document.getElementById("photo");
-    const popup = document.querySelector(".popup");
     const photoDiv = document.getElementById("student-photo-div");
     const nameDiv = document.getElementById("student-name");
     const imageDiv = document.getElementById("image");
@@ -16,54 +13,73 @@ document.addEventListener("DOMContentLoaded", () => {
             submit.disabled = true;
         } else {
             loader.classList.add("hidden")
-            submit.innerText = "Baixar";
+            submit.innerText = "Baixar Icones do Dia";
             submit.disabled = false;
         }
     }
 
-    submit.addEventListener("click", () => {
+    submit.addEventListener("click", async() => {
         setLoading(true)
-        if(name.value == "" || photo.value == "") {
-            alert("Os campos devem ser preenchidos");
-            setLoading(false)
-            return
-        }
 
-        nameDiv.innerText = name.value;
-
-        const file = photo.files[0];
-
-        photoDiv.style.backgroundPosition = "bottom"; 
-        photoDiv.style.backgroundSize = "cover"; 
-
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                const img = new Image();
-                img.src = e.target.result;
-                img.style.width = "100%";
-                img.style.height = "auto";
-                img.style.objectFit = "cover";
-                photoDiv.innerHTML = "";
-                photoDiv.appendChild(img);
-            };            
-            reader.readAsDataURL(file); 
-        }
-
-        setTimeout(() => {
-            html2canvas(imageDiv, {
-                onrendered: function (canvas) {
-
-                    const imgData = canvas.toDataURL("image/png");
-
-                    const downloadLink = document.createElement("a");
-                    downloadLink.href = imgData;
-                    downloadLink.download = `Parabens ${name.value}.png`; 
-                    downloadLink.click(); 
-                    setLoading(false)
+        fetch('./db/aniversarios.json').then(response => response.json()).then(data => {
+            const icones = [];
+            data.forEach(aluno => {
+                const date = new Date();
+                const newDate = date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+                if(aluno.data == newDate) {
+                    icones.push({
+                        nome: aluno.nome,
+                        matricula: aluno.matricula
+                    })
+                    console.log(true)
+                } else {
+                    console.log(false)
                 }
             });
-        }, 500)
-        
+
+            if (icones.length > 0) {
+                let semFoto = false;
+                console.log(icones)
+                icones.forEach(icone => {
+                    console.log(icone)
+                    const nomeIcone = icone.nome.trim().split(/\s+/);
+                    nameDiv.innerText = `${nomeIcone[0]} ${nomeIcone[nomeIcone.length - 1]}`;
+
+                    if(icone.matricula.trim().length <= 7) {
+                        const file = `./fotos/${icone.matricula}.jpeg`;
+                        photoDiv.style.backgroundPosition = "bottom"; 
+                        photoDiv.style.backgroundSize = "cover"; 
+                        const img = new Image();
+                        img.src = file;
+                        img.style.width = "100%";
+                        img.style.height = "auto";
+                        img.style.objectFit = "cover";
+                        photoDiv.innerHTML = "";
+                        photoDiv.appendChild(img);
+
+                        console.log("Entrou no try")
+                        html2canvas(imageDiv).then(canvas => {
+                            const imgData = canvas.toDataURL("image/png");
+                            const downloadLink = document.createElement("a");
+                            downloadLink.href = imgData;
+                            downloadLink.download = `Parabens ${icone.nome}.png`; 
+                            downloadLink.click(); 
+                            setLoading(false);
+                        }); 
+                    } else {
+                        semFoto = true;
+                    }
+                })
+                if(semFoto) {
+                    throw new Error("Os aniversariantes de hoje ainda não possuem a foto registrada.")
+                }
+            } else {
+                throw new Error("Não há aniversariantes hoje.")
+            }
+        }).catch(error => {
+            console.error(error)
+            alert(error)
+            setLoading(false)
+        })
     });
 });
